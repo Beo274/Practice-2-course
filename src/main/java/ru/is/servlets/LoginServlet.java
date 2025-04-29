@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.*;
+import java.util.Objects;
+
 import ru.is.DataBaseConnection;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -22,40 +24,33 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String name = req.getParameter("name");
         String pass = req.getParameter("password");
+        try (Connection conn = DataBaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE id = ?")) {
 
-        System.out.println(name);
-        System.out.println(pass);
+            stmt.setInt(1,1);
 
-        try (Connection conn = DataBaseConnection.getConnection()) {
-            if (conn == null) {
-                throw new ServletException("Не удалось установить соединение с БД");
-            }
-
-            try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE name = ?")) {
-                stmt.setString(1, name);
-                ResultSet rs = stmt.executeQuery();
+            try (ResultSet rs = stmt.executeQuery()) {
 
                 if (rs.next()) {
                     String hashedPassword = rs.getString("password");
+                    System.out.println("hashed " + hashedPassword);
 
-                    if (BCrypt.checkpw(pass, hashedPassword)) {
-                        HttpSession session = req.getSession();
-                        session.setAttribute("username", name);
-                        resp.sendRedirect("home.jsp");
-                        return;
+                    boolean passwordMatches = BCrypt.checkpw(pass, hashedPassword);
+                    System.out.println("Password verification result: " + passwordMatches);
+
+                    if (passwordMatches) {
+                        req.getRequestDispatcher("jsp/main.jsp").forward(req, resp);
                     }
+                } else {
+                    System.out.println("User not found");
                 }
-
-                req.setAttribute("error", "Неверное имя пользователя или пароль");
-                req.getRequestDispatcher("/jsp/login.jsp").forward(req, resp);
             }
-        } catch (SQLException e) {
-            throw new ServletException("Ошибка базы данных: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new ServletException("Database error", e);
         }
     }
 }
