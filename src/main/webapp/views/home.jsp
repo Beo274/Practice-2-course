@@ -1,6 +1,6 @@
-<%@page session="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <html lang="en">
 	<head>
 		<title>Главная страница</title>
@@ -39,29 +39,46 @@
 			</div>
 		</nav>
 		<div>
-		<form class = "m-5">
+		<form class = "m-5"  method="post" action="/home">
 			<div class="mb-3">
 				<label>ФИО заявителя</label>
-				<input class="form-control">
+				<input class="form-control" name="applicantName">
 			</div>
 			<div class="mb-3">
 				<label>ФИО руководителя</label>
-				<input class="form-control">
+				<input class="form-control" name="managerName">
 			</div>
 			<div class="mb-3">
 				<label>Адрес</label>
-				<input class="form-control">
+				<input class="form-control" name="address">
 			</div>
 			<div class="mb-3">
 				<label>Тематика</label>
-				<input class="form-control">
+				<input class="form-control" name="theme">
 			</div>
 			<div class="mb-3">
 				<label>Содержание</label>
-				<textarea class="form-control form-control-lg" id="largeTextarea" rows="4"></textarea>
+				<textarea class="form-control form-control-lg" id="largeTextarea" rows="4" name="content"></textarea>
 			</div>
 			<button type="submit" class="btn btn-primary">Подтвердить</button>
 		</form>
+		</div>
+		<div class="container mt-3">
+			<%-- Сообщение об успехе --%>
+			<c:if test="${not empty successMessage}">
+				<div class="alert alert-success alert-dismissible fade show">
+						${successMessage}
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+				</div>
+			</c:if>
+
+			<%-- Сообщение об ошибке --%>
+			<c:if test="${not empty errorMessage}">
+				<div class="alert alert-danger alert-dismissible fade show">
+						${errorMessage}
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+				</div>
+			</c:if>
 		</div>
 	</body>
 </html>
