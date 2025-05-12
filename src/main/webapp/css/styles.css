@@ -1,4 +1,4 @@
-.oswald-<uniquifier> {
+.oswald {
            font-family: "Oswald", sans-serif;
            font-optical-sizing: auto;
            font-weight: 500;
@@ -6,7 +6,7 @@
          }
 
 body {
-  font-family: "Oswald", sans-serif;
+    font-family: 'Oswald', sans-serif;
 }
 
 .editable-cell {
@@ -25,4 +25,25 @@ body {
 
 .editable-cell:focus {
   outline: none;
+}
+
+.appeal-card {
+    border-left: 4px solid #dc3545;
+    transition: all 0.3s ease;
+}
+.appeal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.badge-unresolved {
+    background-color: #dc3545;
+}
+.qr-container {
+    margin: 20px;
+    text-align: center;
+}
+.qr-image {
+    border: 1px solid #ddd;
+    padding: 5px;
+    background: white;
 }

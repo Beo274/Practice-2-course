@@ -1,13 +1,58 @@
 package ru.is.controller;
 
+import net.glxn.qrgen.javase.QRCode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import ru.is.models.Appeal;
+import ru.is.service.WatchAppealService;
+
+import java.io.ByteArrayOutputStream;
+import java.util.Base64;
+import java.util.List;
 
 @Controller
 public class ChancController {
 
+    private final WatchAppealService watchAppealService;
+
+    @Autowired
+    public ChancController(WatchAppealService watchAppealService) {
+        this.watchAppealService = watchAppealService;
+    }
+
     @GetMapping("/chanc")
-    public String showChancPage() {
+    public String showChancPage(Model model) {
+        List<Appeal> unresolvedAppeals = watchAppealService.getAppealsWithEmptyResolution();
+
+        unresolvedAppeals.forEach(appeal -> {
+            String info = String.format(
+                    "Заявитель: %s\nМенеджер: %s\nАдрес: %s\nТема: %s\nСодержание: %s",
+                    appeal.getApplicantName(),
+                    appeal.getManagerName(),
+                    appeal.getAddress(),
+                    appeal.getTheme(),
+                    appeal.getContent()
+            );
+
+            try {
+                // Указываем кодировку UTF-8 при генерации QR-кода
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                QRCode.from(info)
+                        .withCharset("UTF-8") // Явно указываем кодировку
+                        .writeTo(outputStream);
+
+                String base64Qr = Base64.getEncoder().encodeToString(outputStream.toByteArray());
+                appeal.setQrCodeBase64("data:image/png;base64," + base64Qr);
+            } catch (Exception e) {
+                // В случае ошибки можно установить пустую строку или изображение-заглушку
+                appeal.setQrCodeBase64("");
+                e.printStackTrace();
+            }
+        });
+
+        model.addAttribute("appeals", unresolvedAppeals);
         return "chanc";
     }
 }

@@ -33,6 +33,17 @@ public class Appeal {
     @Column(nullable = true)
     private String note;
 
+    @Lob
+    private String qrCodeBase64;
+
+    public String getQrCodeBase64() {
+        return qrCodeBase64;
+    }
+
+    public void setQrCodeBase64(String qrCodeBase64) {
+        this.qrCodeBase64 = qrCodeBase64;
+    }
+
     public Appeal(Long id, String applicantName, String managerName, String address, String theme, String content, String resolution, boolean status, String note) {
         this.id = id;
         this.applicantName = applicantName;

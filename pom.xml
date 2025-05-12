@@ -19,6 +19,13 @@
 
     <packaging>war</packaging>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- Spring 6 MVC -->
         <dependency>
@@ -117,8 +124,21 @@
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>2.5</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/com.github.kenglxn.qrgen/javase -->
+        <dependency>
+            <groupId>com.github.kenglxn.QRgen</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.3.0</version>
+        </dependency>
     </dependencies>
+
+
 
     <build>
         <finalName>practice</finalName>
