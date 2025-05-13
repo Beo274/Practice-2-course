@@ -37,16 +37,14 @@ public class ChancController {
             );
 
             try {
-                // Указываем кодировку UTF-8 при генерации QR-кода
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 QRCode.from(info)
-                        .withCharset("UTF-8") // Явно указываем кодировку
+                        .withCharset("UTF-8")
                         .writeTo(outputStream);
 
                 String base64Qr = Base64.getEncoder().encodeToString(outputStream.toByteArray());
                 appeal.setQrCodeBase64("data:image/png;base64," + base64Qr);
             } catch (Exception e) {
-                // В случае ошибки можно установить пустую строку или изображение-заглушку
                 appeal.setQrCodeBase64("");
                 e.printStackTrace();
             }
