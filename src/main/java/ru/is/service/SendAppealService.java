@@ -9,7 +9,6 @@ import ru.is.models.Appeal;
 
 @Service
 public class SendAppealService {
-
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -18,6 +17,13 @@ public class SendAppealService {
         Session session = sessionFactory.getCurrentSession();
         session.persist(appeal);
         return appeal.getId();
+    }
+
+    // Добавьте этот метод
+    @Transactional
+    public void saveAppeal(Appeal appeal) {
+        Session session = sessionFactory.getCurrentSession();
+        session.merge(appeal);
     }
 
     @Transactional(readOnly = true)

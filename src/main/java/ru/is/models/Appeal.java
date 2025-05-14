@@ -1,6 +1,7 @@
 package ru.is.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "appeals")
@@ -9,18 +10,23 @@ public class Appeal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "ФИО заявителя обязательно для заполнения")
     @Column(nullable = false)
     private String applicantName;
 
+    @NotBlank(message = "ФИО руководителя обязательно для заполнения")
     @Column(nullable = false)
     private String managerName;
 
+    @NotBlank(message = "Адрес обязателен для заполнения")
     @Column(nullable = false)
     private String address;
 
+    @NotBlank(message = "Тема обязательна для заполнения")
     @Column(nullable = false)
     private String theme;
 
+    @NotBlank(message = "Содержание обязательно для заполнения")
     @Column(nullable = false)
     private String content;
 
