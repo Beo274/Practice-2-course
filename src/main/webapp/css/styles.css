@@ -52,3 +52,26 @@ body {
     padding: 5px;
     background: white;
 }
+
+.form-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+}
+.container {
+    max-width: 800px;
+    margin-top: 30px;
+}
+.form-textarea {
+    min-height: 300px;
+    font-family: monospace;
+}
+.instructions {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}

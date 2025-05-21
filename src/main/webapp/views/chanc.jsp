@@ -33,6 +33,11 @@
                     <a class="nav-link active text-white" aria-current="page">Канцелярия</a>
                 </li>
             </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active text-white" aria-current="page" href="chanc/add">Добавить рассмотренное заявление</a>
+                </li>
+            </ul>
         </div>
         <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"

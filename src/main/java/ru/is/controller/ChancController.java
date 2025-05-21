@@ -27,7 +27,6 @@ public class ChancController {
         this.sendAppealService = sendAppealService;
     }
 
-    // Существующий метод для отображения страницы канцелярии
     @GetMapping("/chanc")
     public String showChancPage(Model model) {
         List<Appeal> unresolvedAppeals = watchAppealService.getAppealsWithEmptyResolution();
@@ -60,23 +59,21 @@ public class ChancController {
         return "chanc";
     }
 
-    // Новый метод для обработки отправки заявления
     @PostMapping("/submit-appeal")
     public String submitAppeal(@Valid @ModelAttribute("appeal") Appeal appeal,
                                BindingResult bindingResult,
                                Model model) {
 
         if (bindingResult.hasErrors()) {
-            // Если есть ошибки валидации, возвращаем пользователя на форму с сообщениями об ошибках
-            return "home"; // предполагается, что форма находится на странице home
+            return "home";
         }
 
         try {
             sendAppealService.saveAppeal(appeal);
-            return "redirect:/home?success"; // редирект с параметром успеха
+            return "redirect:/home?success";
         } catch (Exception e) {
             model.addAttribute("error", "Произошла ошибка при сохранении заявления");
-            return "home"; // возврат на форму с сообщением об ошибке
+            return "home";
         }
     }
 }
