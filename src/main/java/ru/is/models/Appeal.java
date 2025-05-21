@@ -1,8 +1,8 @@
 package ru.is.models;
-
+import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-
+@Transactional
 @Entity
 @Table(name = "appeals")
 public class Appeal {
