@@ -10,8 +10,9 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableTransactionManagement
+@EnableTransactionManagement // Убедитесь, что эта аннотация есть
 public class HibernateConfig {
+
     @Bean
     public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
@@ -21,16 +22,16 @@ public class HibernateConfig {
         return sessionFactory;
     }
 
+    @Bean
+    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+        return new HibernateTransactionManager(sessionFactory);
+    }
+
     private Properties hibernateProperties() {
         Properties props = new Properties();
         props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         props.put("hibernate.show_sql", "true");
         props.put("hibernate.hbm2ddl.auto", "update");
         return props;
-    }
-
-    @Bean
-    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
-        return new HibernateTransactionManager(sessionFactory);
     }
 }

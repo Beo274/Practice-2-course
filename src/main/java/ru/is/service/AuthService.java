@@ -1,28 +1,33 @@
 package ru.is.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.is.models.User;
 import ru.is.repository.UserRepository;
-import ru.is.utils.PasswordUtil;
+import org.mindrot.jbcrypt.BCrypt;
 import java.util.Optional;
 
 @Service
 public class AuthService {
     private final UserRepository userRepository;
 
+    @Autowired
     public AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    @Transactional(readOnly = true)
-    public boolean authenticate(String username, String password) {
+    public User authenticate(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
-
-        if (userOpt.isEmpty()) {
-            return false;
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (BCrypt.checkpw(password, user.getPassword())) {
+                return user;
+            }
         }
-        User user = userOpt.get();
-        return PasswordUtil.checkPassword(password, user.getPassword());
+        return null;
+    }
+
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }

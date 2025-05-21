@@ -1,11 +1,11 @@
 package ru.is.models;
 
-
 import jakarta.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,12 +16,17 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    // Конструкторы
+    public User() {}
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public User() {
+    // Геттеры и сеттеры
+    public Long getId() {
+        return id;
     }
 
     public String getUsername() {
@@ -39,5 +44,4 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }
