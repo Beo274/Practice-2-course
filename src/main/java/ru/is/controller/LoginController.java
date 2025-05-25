@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.is.models.User;
@@ -27,6 +28,7 @@ public class LoginController {
         return "login";
     }
 
+    @Transactional
     @PostMapping("/login")
     public String handleLogin(
             @RequestParam String username,

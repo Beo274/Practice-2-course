@@ -19,7 +19,6 @@ public class SendAppealService {
         return appeal.getId();
     }
 
-    // Добавьте этот метод
     @Transactional
     public void saveAppeal(Appeal appeal) {
         Session session = sessionFactory.getCurrentSession();
