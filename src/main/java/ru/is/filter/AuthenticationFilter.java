@@ -25,13 +25,11 @@ public class AuthenticationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String path = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
 
-        // Разрешаем доступ к публичным URL без авторизации
         if (isPublicPath(path)) {
             chain.doFilter(request, response);
             return;
         }
 
-        // Проверка аутентификации для защищённых URL
         User loggedUser = getAuthenticatedUser(httpRequest);
 
         if (loggedUser == null) {
@@ -60,7 +58,6 @@ public class AuthenticationFilter implements Filter {
             }
         }
 
-        // 2. Проверка rememberMe куки
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -68,7 +65,6 @@ public class AuthenticationFilter implements Filter {
                     Optional<User> userOptional = userService.findByUsername(cookie.getValue());
                     if (userOptional.isPresent()) {
                         User user = userOptional.get();
-                        // Создаём новую сессию для восстановленного пользователя
                         request.getSession(true).setAttribute("loggedUser", user);
                         return user;
                     }
@@ -81,6 +77,6 @@ public class AuthenticationFilter implements Filter {
 
     @Override
     public void destroy() {
-        // Очистка ресурсов (не требуется)
+
     }
 }

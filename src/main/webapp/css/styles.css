@@ -69,9 +69,3 @@ body {
     min-height: 300px;
     font-family: monospace;
 }
-.instructions {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-}

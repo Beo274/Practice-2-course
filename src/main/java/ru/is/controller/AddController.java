@@ -1,5 +1,8 @@
 package ru.is.controller;
 
+import com.google.zxing.*;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,9 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import ru.is.models.Appeal;
 import ru.is.repository.AppealRepository;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,11 +35,31 @@ public class AddController {
         return "addAppeal";
     }
 
+    private String decodeQr(InputStream in) throws Exception {
+        BufferedImage img = ImageIO.read(in);
+        if (img == null) {
+            throw new IllegalArgumentException("Невозможно прочитать изображение");
+        }
+        LuminanceSource source = new BufferedImageLuminanceSource(img);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        Result result = new MultiFormatReader().decode(bitmap);
+        return result.getText();
+    }
+
     @PostMapping("/add")
     @Transactional
     public String processAppeal(
-            @RequestParam String appealInput,
+            @RequestParam("qrFile") MultipartFile qrFile,
             Model model) {
+
+        String appealInput;
+        try {
+            appealInput = decodeQr(qrFile.getInputStream());
+        } catch (Exception e) {
+            model.addAttribute("error", "Ошибка при декодировании QR-кода: " + e.getMessage());
+            model.addAttribute("appealInput", "");
+            return "addAppeal";
+        }
 
         try {
             String[] lines = appealInput.split("\n");
@@ -66,6 +93,8 @@ public class AddController {
                     model.addAttribute("appealInput", appealInput);
                     return "addAppeal";
                 }
+            } else {
+                appeal = new Appeal();
             }
 
             if (fields.containsKey("Заявитель")) {
@@ -112,10 +141,11 @@ public class AddController {
             model.addAttribute("appealInput", updatedOutput);
 
         } catch (Exception e) {
-            model.addAttribute("error", "Ошибка: " + e.getMessage());
-            model.addAttribute("appealInput", appealInput);
+            model.addAttribute("error", "Ошибка при обработке данных: " + e.getMessage());
+            model.addAttribute("appealInput", "");
         }
 
         return "addAppeal";
     }
+
 }

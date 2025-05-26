@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableTransactionManagement // Убедитесь, что эта аннотация есть
+@EnableTransactionManagement 
 public class HibernateConfig {
 
     @Bean

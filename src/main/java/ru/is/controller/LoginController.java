@@ -48,7 +48,6 @@ public class LoginController {
             return "login";
         }
 
-        // Успешная аутентификация
         request.getSession().setAttribute("loggedUser", user);
 
         if (rememberMe) {

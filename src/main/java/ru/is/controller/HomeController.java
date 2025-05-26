@@ -23,7 +23,6 @@ public class HomeController {
         this.sendAppealService = sendAppealService;
     }
 
-    // Добавляем обработчик для корневого URL
     @GetMapping("/")
     public String rootRedirect() {
         return "redirect:/home";

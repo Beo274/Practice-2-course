@@ -8,15 +8,10 @@
     <title>Канцелярия - Обработанные заявления</title>
 
     <link rel="shortcut icon" href="/image/icon.png" type="image/png">
-
-    <link rel="shortcut icon" href="/image/icon.png" type="image/png">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
@@ -33,7 +28,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active text-white" aria-current="page">Добавление рассмаотренного заявления</a>
+                    <a class="nav-link active text-white" aria-current="page">Добавление рассмотренного заявления</a>
                 </li>
             </ul>
         </div>
@@ -44,20 +39,9 @@
         </button>
     </div>
 </nav>
+
 <div class="container">
     <h2 class="mb-4">Форма обращения</h2>
-
-    <div class="instructions">
-        <h5>Формат ввода:</h5>
-        <pre>ID: число
-Заявитель: имя
-Менеджер: имя
-Адрес: адрес
-Тема: тема
-Содержание: текст содержания
-Резолюция: текст резолюции
-Заметка: текст заметки</pre>
-    </div>
 
     <c:if test="${not empty error}">
         <div class="alert alert-danger">${error}</div>
@@ -67,12 +51,20 @@
         <div class="alert alert-success">${message}</div>
     </c:if>
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <div class="mb-3">
-            <h3>Текст заявления</h3>
-            <textarea class="form-control form-textarea" name="appealInput">${appealInput}</textarea>
+            <h3>Загрузите QR-код с данными обращения</h3>
+            <input class="form-control" type="file" name="qrFile" accept="image/*">
         </div>
-        <button type="submit" class="btn btn-primary">Сохранить</button>
+
+        <c:if test="${not empty appealInput}">
+            <div class="mb-3">
+                <h3>Декодированные данные:</h3>
+                <textarea class="form-control form-textarea" readonly>${appealInput}</textarea>
+            </div>
+        </c:if>
+
+        <button type="submit" class="btn btn-primary">Отправить</button>
     </form>
 </div>
 
